@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                %-5level %d{HH:mm:ss.SSS} [%thread %F:%L] %method - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+    <logger name="org.springframework" level="INFO"/>
+    <logger name="org.hibernate" level="INFO"/>
+ 
+    <root level="DEBUG"> <!-- DEBUG -->
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>

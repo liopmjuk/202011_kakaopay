@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Built-By: Jeon
+Build-Jdk: 12.0.2
+Implementation-Title: pretask
+Implementation-Version: 0.0.1-SNAPSHOT
+Implementation-Vendor-Id: com.kakaopay.pretask
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-boot
+ -starter-parent/pretask
+Created-By: Maven Integration for Eclipse
+
