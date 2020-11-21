@@ -1,4 +1,4 @@
-package com.kakaopay.pretask;
+package com.kakaopay.pretask.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -19,7 +19,7 @@ import com.kakaopay.pretask.repository.SpendRepository;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-public class PretaskJpaTest {
+public class SpendRepositoryTest {
 	@Autowired
 	SpendRepository spendRepository;
 	

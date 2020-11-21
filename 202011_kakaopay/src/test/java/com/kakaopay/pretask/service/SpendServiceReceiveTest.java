@@ -1,4 +1,4 @@
-package com.kakaopay.pretask;
+package com.kakaopay.pretask.service;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -32,7 +32,7 @@ import com.kakaopay.pretask.entity.SpendInfo;
 @RunWith(SpringRunner.class)
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class PretaskReceiveTest {
+public class SpendServiceReceiveTest {
 	
 	@Autowired
 	private WebApplicationContext context;
@@ -51,10 +51,10 @@ public class PretaskReceiveTest {
 	}
 	
 //	@Test
-	public void 뿌리기사용자_요청_테스트() throws Exception {
+	public void 뿌린사용자가_요청하는경우_테스트() throws Exception {
 		//given
 		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.add("X-USER-ID", "12");
+		httpHeaders.add("X-USER-ID", "10");
 		httpHeaders.add("X-ROOM-ID", "R01");
 		
 		TokenRequest request = TokenRequest.builder()
@@ -63,9 +63,9 @@ public class PretaskReceiveTest {
 		
 		SpendInfo mockSpendInfo = SpendInfo.builder()
 				.token("AAA")
-				.spendUserId(12)
+				.spendUserId(10)
 				.roomId("R01")
-				.spendTime(LocalDateTime.now().minusMinutes(11))
+				.spendTime(LocalDateTime.now())
 				.totalMoney(50000)
 				.build();
 		
@@ -85,7 +85,7 @@ public class PretaskReceiveTest {
 	}
 	
 //	@Test
-	public void 다른방에서_요청_테스트() throws Exception {
+	public void 다른방에서_요청온경우_테스트() throws Exception {
 		//given
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.add("X-USER-ID", "12");
@@ -99,7 +99,7 @@ public class PretaskReceiveTest {
 				.token("AAA")
 				.spendUserId(10)
 				.roomId("R01")
-				.spendTime(LocalDateTime.now().minusMinutes(11))
+				.spendTime(LocalDateTime.now())
 				.totalMoney(50000)
 				.build();
 		
@@ -119,7 +119,7 @@ public class PretaskReceiveTest {
 	}
 	
 //	@Test
-	public void 받을유효기간_경과테스트() throws Exception {
+	public void 받을유효기간_경과_테스트() throws Exception {
 		//given
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.add("X-USER-ID", "12");
@@ -131,7 +131,7 @@ public class PretaskReceiveTest {
 		
 		SpendInfo mockSpendInfo = SpendInfo.builder()
 				.token("BBB")
-				.spendUserId(10)
+				.spendUserId(11)
 				.roomId("R02")
 				.spendTime(LocalDateTime.now().minusMinutes(11))
 				.totalMoney(50000)
@@ -153,7 +153,7 @@ public class PretaskReceiveTest {
 	}
 	
 //	@Test
-	public void 다시받는경우_테스트() throws Exception {
+	public void 받은사람이_다시받는경우_테스트() throws Exception {
 		//given
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.add("X-USER-ID", "21");
@@ -165,7 +165,7 @@ public class PretaskReceiveTest {
 		
 		SpendInfo mockSpendInfo = SpendInfo.builder()
 				.token("BBB")
-				.spendUserId(10)
+				.spendUserId(11)
 				.roomId("R02")
 				.spendTime(LocalDateTime.now())
 				.totalMoney(50000)
@@ -187,7 +187,7 @@ public class PretaskReceiveTest {
 	}
 	
 	@Test
-	public void 정상_테스트() throws Exception {
+	public void 받기API테스트() throws Exception {
 		//given
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.add("X-USER-ID", "21");

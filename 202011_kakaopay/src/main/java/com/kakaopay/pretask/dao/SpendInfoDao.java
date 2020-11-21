@@ -17,8 +17,7 @@ public class SpendInfoDao {
 	
 	public SpendInfo findByToken(String token) {
 		Optional<SpendInfo> spendInfo = spendRepositoy.findById(token);
-		spendInfo.orElseThrow(() -> new SpendException(SpendErrorCode.NOT_ALLOWED_TOKEN));
-		return spendInfo.get();
+		return spendInfo.orElseThrow(() -> new SpendException(SpendErrorCode.NOT_ALLOWED_TOKEN));
 	}
 	
 	public void save(SpendInfo spendInfo) {

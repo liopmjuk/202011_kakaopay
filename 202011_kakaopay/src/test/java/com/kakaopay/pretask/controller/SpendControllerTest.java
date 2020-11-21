@@ -1,4 +1,4 @@
-package com.kakaopay.pretask;
+package com.kakaopay.pretask.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 
@@ -27,7 +27,7 @@ import com.kakaopay.pretask.service.SpendService;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(SpendController.class)
-public class PretaskHeaderTest {
+public class SpendControllerTest {
 	@Autowired
 	private MockMvc mvc;
 	

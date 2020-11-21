@@ -1,4 +1,4 @@
-package com.kakaopay.pretask;
+package com.kakaopay.pretask.service;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -25,7 +25,7 @@ import com.kakaopay.pretask.dto.TokenResponse;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class PretaskSpendTest {
+public class SpendServiceSpendTest {
 	
 	@Autowired
 	private WebApplicationContext context;

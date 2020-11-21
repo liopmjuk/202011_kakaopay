@@ -1,4 +1,4 @@
-package com.kakaopay.pretask;
+package com.kakaopay.pretask.service;
 
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -23,7 +23,7 @@ import com.kakaopay.pretask.dto.TokenRequest;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class PretaskInquiryTest {
+public class SpendServiceInquiryTest {
 	@Autowired
 	private WebApplicationContext context;
 	
@@ -38,7 +38,7 @@ public class PretaskInquiryTest {
 	}
 	
 //	@Test
-	public void 다른사용자가_상태조회테스트() throws Exception {
+	public void 뿌리지않은_사용자가_상태조회_테스트() throws Exception {
 		//given
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.add("X-USER-ID", "12");
@@ -60,7 +60,7 @@ public class PretaskInquiryTest {
 	}
 	
 	//@Test
-	public void 다른대화방_상태조회테스트() throws Exception {
+	public void 다른대화방_뿌리기상태조회테스트() throws Exception {
 		//given
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.add("X-USER-ID", "10");
@@ -82,7 +82,7 @@ public class PretaskInquiryTest {
 	}
 	
 	@Test
-	public void 정상_테스트() throws Exception {
+	public void 조회API테스트() throws Exception {
 		//given
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.add("X-USER-ID", "10");

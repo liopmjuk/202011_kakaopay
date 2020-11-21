@@ -1,4 +1,4 @@
-package com.kakaopay.pretask;
+package com.kakaopay.pretask.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -19,7 +19,7 @@ import com.kakaopay.pretask.service.TokenGenerateService;
 		MoneySplitService.class,
 		TokenGenerateService.class
 	})
-public class PretaskUnitTest {
+public class MoneyTokenTest {
 	
 	@Autowired
 	MoneySplitService moneySplitService;
@@ -28,7 +28,7 @@ public class PretaskUnitTest {
 	TokenGenerateService tokenGenerateService;
 	
 	@Test
-	public void generateTokenTest() {
+	public void 토큰생성_테스트() {
 		String roomId = "ABC";
 		String generatedString = "";
 		
@@ -44,7 +44,7 @@ public class PretaskUnitTest {
 	}
 	
 	@Test
-	public void moneySplitTest() {
+	public void 뿌리기돈_분배_테스트() {
 		//given
 		long totalMoney = 6000;
 		
