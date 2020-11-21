@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Getter
@@ -21,6 +22,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
+@ToString
 public class SpendInfo {
 	@Id
 	@Column(name="TOKEN")
@@ -40,13 +42,18 @@ public class SpendInfo {
 	
 	@Column(name="ALL_RECEIVED_YN")
 	private String allReceivedYn;
-	
-	@Column(name="RECEIVED_USER_ID")
-	private int receivedUserId;
-	
-	public void checkUserId(int userId) {
-		if(this.spendUserId != userId) {
+
+	//뿌린 사용자와 같은 사용자인지 조회
+	public void checkSameUserId(int userId) {
+		if(this.spendUserId == userId) {
 			throw new SpendException(SpendErrorCode.RECV_NOT_ALLOWED_USER);
+		}
+	}
+	
+	//뿌린 사용자와 다른 사용자인지 조회
+	public void checkNotSameUserId(int userId) {
+		if(this.spendUserId != userId) {
+			throw new SpendException(SpendErrorCode.INQUIRY_NOT_ALLOWED_USER);
 		}
 	}
 	

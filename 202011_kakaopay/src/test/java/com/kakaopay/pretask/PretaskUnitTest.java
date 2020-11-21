@@ -46,13 +46,14 @@ public class PretaskUnitTest {
 	@Test
 	public void moneySplitTest() {
 		//given
-		long totalMoney = 5000;
+		long totalMoney = 6000;
 		
 		//when
-		long[] moneys = moneySplitService.splitMoney(1, totalMoney);
+		long[] moneys = moneySplitService.splitMoney(3, totalMoney);
 		
 		long calMoney = 0;
 		for(long money : moneys) {
+//			System.out.println(money);
 			calMoney += money;
 		}
 		

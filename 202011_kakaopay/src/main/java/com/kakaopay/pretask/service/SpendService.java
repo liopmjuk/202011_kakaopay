@@ -7,9 +7,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kakaopay.pretask.dao.SpendInfoDao;
 import com.kakaopay.pretask.dto.MoneyResponse;
 import com.kakaopay.pretask.dto.SpendInfoRequest;
 import com.kakaopay.pretask.dto.SpendStatusResponse;
@@ -19,6 +22,7 @@ import com.kakaopay.pretask.entity.SpendInfo;
 import com.kakaopay.pretask.entity.SpendMoneyDetail;
 import com.kakaopay.pretask.exception.SpendErrorCode;
 import com.kakaopay.pretask.exception.SpendException;
+import com.kakaopay.pretask.exception.SpendExceptionHandler;
 import com.kakaopay.pretask.repository.SpendDetailRepository;
 import com.kakaopay.pretask.repository.SpendRepository;
 import com.kakaopay.pretask.vo.ReceivedInfo;
@@ -34,12 +38,13 @@ public class SpendService {
 	TokenGenerateService tokenGenerateService;
 	
 	@Autowired
-	SpendRepository spendRepository;
+	SpendInfoDao spendInfoDao;
 	
 	@Autowired
 	SpendDetailRepository spendDetailRepository;
 	
 	private static Random random = new Random();
+	Logger logger = LoggerFactory.getLogger(SpendService.class);
 	
 	public TokenResponse spendMoney(SpendInfoRequest spendInfoRequest, UserInfo userInfo) throws NoSuchAlgorithmException {
 		// TODO Auto-generated method stub
@@ -65,7 +70,9 @@ public class SpendService {
 				.allReceivedYn("N")
 				.build();
 		
-		spendRepository.save(spendInfo);
+		logger.debug("\nsave spendInfo {}", spendInfo.toString());
+		
+		spendInfoDao.save(spendInfo);
 		
 		int spendId = 1;
 		for(long onetimeMoney: splitedMoneys) {
@@ -93,13 +100,14 @@ public class SpendService {
 		
 		LocalDateTime nowTime = LocalDateTime.now();
 		
-		SpendInfo spendInfo = spendRepository.findById(token)
-				.orElseThrow(() -> new SpendException(SpendErrorCode.NOT_ALLOWED_TOKEN));
+		SpendInfo spendInfo = spendInfoDao.findByToken(token);
 		
-			
 		//자신이 뿌리기한 건은 자신이 받을 수 없음
-		spendInfo.checkUserId(userInfo.getUserId());
+		spendInfo.checkSameUserId(userInfo.getUserId());
 		
+		//뿌리기가 호출된 대화방과 동일한 대화방에 속한 사용자만이 받을 수 있음
+		spendInfo.checkRoomId(userInfo.getRoomId());
+				
 		//뿌린 건은 10분 간만 유효
 		if(spendInfo.isSpendExpired(nowTime)) {throw new SpendException(SpendErrorCode.SPEND_EXPIRED);};
 		
@@ -111,7 +119,7 @@ public class SpendService {
 		
 		List<SpendMoneyDetail> moneyDetails = spendDetailRepository.findByToken(token);
 		int memberCnt = moneyDetails.size();
-
+		
 		int startIdx = random.nextInt(memberCnt);
 		
 		//뿌리기 건 중 누구에게도 할당되지 않은 분배건 하나를 호출한 사용자에게 할당하고, 그 금액을 응답값으로 내려줌
@@ -135,15 +143,11 @@ public class SpendService {
 		LocalDateTime nowDate = LocalDateTime.now();
 		
 		//토큰 조회 - 뿌린 사람 자신, 방
-		SpendInfo spendInfo = spendRepository.findById(token)
-				.orElseThrow(() -> new SpendException(SpendErrorCode.NOT_ALLOWED_TOKEN));
+		SpendInfo spendInfo = spendInfoDao.findByToken(token);
 
 		//다른 사람의 뿌리기 건 체크
-		spendInfo.checkUserId(userInfo.getUserId());
+		spendInfo.checkNotSameUserId(userInfo.getUserId());
 		
-		//뿌리기가 호출된 대화방과 동일한 대화방에 속한 사용자만이 받을 수 있음
-		spendInfo.checkRoomId(userInfo.getRoomId());
-				
 		//7일 동안 조회 가능
 		if(spendInfo.isInquiryExpired(nowDate)) {throw new SpendException(SpendErrorCode.INQUIRY_EXPIRED);}
 		
@@ -170,14 +174,15 @@ public class SpendService {
 	 */
 	private SpendMoneyDetail distributeToUser(int startIdx, List<SpendMoneyDetail> spendMoneyDetails) {
 		SpendMoneyDetail target = null;
-		boolean findTarget = false;
+		boolean findTarget = true;
 		
 		int index = startIdx;
 		
 		while (findTarget) {
 			target = spendMoneyDetails.get(index);
 			if("N".equals(target.getReceivedYn())) {
-				findTarget = true;
+				findTarget = false;
+				break;
 			}
 			
 			index ++;

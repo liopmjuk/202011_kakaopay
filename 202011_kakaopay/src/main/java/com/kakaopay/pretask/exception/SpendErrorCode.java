@@ -2,6 +2,11 @@ package com.kakaopay.pretask.exception;
 
 import lombok.Getter;
 
+/**
+ * 뿌리기 기능에서 발생할 수 있는 에러 케이스 관리 Enum
+ * @author Jeon
+ *
+ */
 @Getter
 public enum SpendErrorCode {
 	
@@ -28,7 +33,7 @@ public enum SpendErrorCode {
 	//유효하지 않은 토큰
 	NOT_ALLOWED_TOKEN("I001","유효하지 않은 토큰입니다."),
 	//뿌리지 않은 사람이 조회
-	INQUIRY_NOT_ALLOWED_ROOM("I002","조회할 수 없는 사용자입니다."),
+	INQUIRY_NOT_ALLOWED_USER("I002","조회할 수 없는 사용자입니다."),
 	//7일 경과
 	INQUIRY_EXPIRED("I003","조회 기간을 경과하였습니다.");
 	

@@ -15,7 +15,7 @@ public class TokenGenerateService {
 		final String salt = "KAKAOPAY_SPEND";
 		LocalDateTime nowTime = LocalDateTime.now();
 		
-		String convertMsg = nowTime + roomId;
+		String convertMsg = roomId + nowTime;
 		MessageDigest md = MessageDigest.getInstance("SHA-256");
 		md.update(salt.getBytes());
 		md.update(convertMsg.getBytes());

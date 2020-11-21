@@ -11,6 +11,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+/**
+ * 받기  API 응답정보
+ * @author Jeon
+ *
+ */
 public class MoneyResponse {
 	long money;
 }

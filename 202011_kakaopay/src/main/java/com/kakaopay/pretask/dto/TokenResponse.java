@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Builder;
 
 /**
- * 토큰 input 정보
+ * 토큰 응답 정보
  * @author Jeon
  *
  */

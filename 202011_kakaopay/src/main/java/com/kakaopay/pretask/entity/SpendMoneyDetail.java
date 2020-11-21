@@ -6,6 +6,9 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.springframework.lang.Nullable;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,6 +18,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @IdClass(SpendKey.class)
 @Table(name="SPEND_MONEY_DETAIL")
+@DynamicInsert
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
