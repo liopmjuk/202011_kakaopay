@@ -62,7 +62,7 @@ public class SpendInfo {
 			throw new SpendException(SpendErrorCode.RECV_NOT_ALLOWED_ROOM);
 		}
 	}
-	
+
 	public boolean isSpendExpired(LocalDateTime nowTime) {
 		LocalDateTime expireTime = this.spendTime.plusMinutes(10);
 		return expireTime.isBefore(nowTime);

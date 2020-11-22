@@ -50,7 +50,7 @@ public class SpendServiceReceiveTest {
 		this.mvc = MockMvcBuilders.webAppContextSetup(context).build();
 	}
 	
-//	@Test
+	@Test
 	public void 뿌린사용자가_요청하는경우_테스트() throws Exception {
 		//given
 		HttpHeaders httpHeaders = new HttpHeaders();
@@ -81,10 +81,11 @@ public class SpendServiceReceiveTest {
 		//then
 		actions
 			.andExpect(status().is4xxClientError())
-			.andExpect(jsonPath("money").isNumber());
+			.andExpect(jsonPath("code").value("R002"))
+			.andExpect(jsonPath("message").value("뿌린 사용자는 받을 수 없습니다."));
 	}
 	
-//	@Test
+	@Test
 	public void 다른방에서_요청온경우_테스트() throws Exception {
 		//given
 		HttpHeaders httpHeaders = new HttpHeaders();
@@ -115,10 +116,11 @@ public class SpendServiceReceiveTest {
 		//then
 		actions
 			.andExpect(status().is4xxClientError())
-			.andExpect(jsonPath("money").isNumber());
+			.andExpect(jsonPath("code").value("R003"))
+			.andExpect(jsonPath("message").value("뿌리기한 방과 동일한 방에서만 받을 수 있습니다."));
 	}
 	
-//	@Test
+	@Test
 	public void 받을유효기간_경과_테스트() throws Exception {
 		//given
 		HttpHeaders httpHeaders = new HttpHeaders();
@@ -134,7 +136,7 @@ public class SpendServiceReceiveTest {
 				.spendUserId(11)
 				.roomId("R02")
 				.spendTime(LocalDateTime.now().minusMinutes(11))
-				.totalMoney(50000)
+				.totalMoney(6000)
 				.build();
 		
 		BDDMockito.given(spendInfoDao.findByToken("BBB")).willReturn(mockSpendInfo);
@@ -149,10 +151,11 @@ public class SpendServiceReceiveTest {
 		//then
 		actions
 			.andExpect(status().is4xxClientError())
-			.andExpect(jsonPath("money").isNumber());
+			.andExpect(jsonPath("code").value("R004"))
+			.andExpect(jsonPath("message").value("받을 기간을 경과하였습니다."));
 	}
 	
-//	@Test
+	@Test
 	public void 받은사람이_다시받는경우_테스트() throws Exception {
 		//given
 		HttpHeaders httpHeaders = new HttpHeaders();
@@ -168,7 +171,7 @@ public class SpendServiceReceiveTest {
 				.spendUserId(11)
 				.roomId("R02")
 				.spendTime(LocalDateTime.now())
-				.totalMoney(50000)
+				.totalMoney(6000)
 				.build();
 		
 		BDDMockito.given(spendInfoDao.findByToken("BBB")).willReturn(mockSpendInfo);
@@ -183,7 +186,43 @@ public class SpendServiceReceiveTest {
 		//then
 		actions
 			.andExpect(status().is4xxClientError())
-			.andExpect(jsonPath("money").isNumber());
+			.andExpect(jsonPath("code").value("R001"))
+			.andExpect(jsonPath("message").value("이미 받은 사용자입니다."));
+	}
+	
+	@Test
+	public void 받기완료된뿌리기_받을경우_테스트() throws Exception {
+		//given
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.add("X-USER-ID", "31");
+		httpHeaders.add("X-ROOM-ID", "R02");
+		
+		TokenRequest request = TokenRequest.builder()
+				.token("BBB")
+				.build();
+		
+		SpendInfo mockSpendInfo = SpendInfo.builder()
+				.token("BBB")
+				.spendUserId(11)
+				.roomId("R02")
+				.spendTime(LocalDateTime.now())
+				.totalMoney(6000)
+				.build();
+		
+		BDDMockito.given(spendInfoDao.findByToken("BBB")).willReturn(mockSpendInfo);
+		
+		//when
+		final ResultActions actions = mvc.perform(post("/receive")
+			.headers(httpHeaders)
+			.content(objectMapper.writeValueAsString(request))
+			.contentType(MediaType.APPLICATION_JSON_UTF8))
+			.andDo(print());
+		
+		//then
+		actions
+			.andExpect(status().is4xxClientError())
+			.andExpect(jsonPath("code").value("R005"))
+			.andExpect(jsonPath("message").value("이미 완료된 뿌리기건입니다."));
 	}
 	
 	@Test

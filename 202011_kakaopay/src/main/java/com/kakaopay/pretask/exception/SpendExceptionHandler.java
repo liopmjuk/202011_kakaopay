@@ -31,21 +31,17 @@ public class SpendExceptionHandler {
 	
 	@ExceptionHandler(value=NumberFormatException.class)
 	public ResponseEntity<ErrorResponse> handleNumberFormatException(NumberFormatException ex) {
-//		final SpendErrorCode error = ex.getError();
-//		logger.error("errorCode: {}, errorMsg: {}", error.getErrorCode(), error.getErrorMsg());
-//		
-//		ErrorResponse response = ErrorResponse.of(error);
+		logger.error("errorMsg: {}", ex.getMessage());
+		ErrorResponse response = ErrorResponse.of(SpendErrorCode.ID_NOT_NUMBER);
 		
-		return new ResponseEntity("", HttpStatus.BAD_REQUEST);
+		return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
 	}
 	
 	@ExceptionHandler(value=HttpMessageNotReadableException.class)
 	public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
-//		final SpendErrorCode error = ex.getError();
-//		logger.error("errorCode: {}, errorMsg: {}", error.getErrorCode(), error.getErrorMsg());
-//		
-//		ErrorResponse response = ErrorResponse.of(error);
+		logger.error("errorMsg: {}", ex.getMessage());
+		ErrorResponse response = ErrorResponse.of(SpendErrorCode.NO_REQUEST_BODY);
 		
-		return new ResponseEntity("", HttpStatus.BAD_REQUEST);
+		return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
 	}
 }

@@ -12,15 +12,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ErrorResponse {
 
-	private String code;
-    private String message;
+	private String errorCode;
+    private String errorMsg;
 
+    private ErrorResponse(String errorCode, String errorMsg) {
+        this.errorCode = errorCode;
+        this.errorMsg = errorMsg;
+    }
+    
     private ErrorResponse(final SpendErrorCode code) {
-        this.message = code.getErrorMsg();
-        this.code = code.getErrorCode();
+    	this.errorCode = code.getErrorCode();
+        this.errorMsg = code.getErrorMsg();
     }
 
     public static ErrorResponse of(final SpendErrorCode code) {
         return new ErrorResponse(code);
+    }
+    
+    public static ErrorResponse of(final String errorCode, String errorMsg) {
+        return new ErrorResponse(errorCode, errorMsg);
     }
 }

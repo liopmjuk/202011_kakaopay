@@ -1,6 +1,5 @@
 package com.kakaopay.pretask.service;
 
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -13,6 +12,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
@@ -29,13 +30,18 @@ import com.kakaopay.pretask.dto.TokenRequest;
 import com.kakaopay.pretask.entity.SpendInfo;
 
 @RunWith(SpringRunner.class)
+@AutoConfigureTestDatabase(replace = Replace.NONE)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class SpendServiceInquiryTest {
+public class SpendServiceMockInquriyTest {
+	
 	@Autowired
 	private WebApplicationContext context;
 	
 	@Autowired
 	private ObjectMapper objectMapper;
+	
+	@MockBean
+	SpendInfoDao spendInfoDao;
 	
 	private MockMvc mvc;
 	
@@ -45,16 +51,27 @@ public class SpendServiceInquiryTest {
 	}
 	
 	@Test
-	public void 뿌리지않은_사용자가_상태조회_테스트() throws Exception {
+	public void 조회유효기간_경과_테스트() throws Exception {
 		//given
 		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.add("X-USER-ID", "31");
-		httpHeaders.add("X-ROOM-ID", "R01");
+		httpHeaders.add("X-USER-ID", "11");
+		httpHeaders.add("X-ROOM-ID", "R02");
 		
 		TokenRequest request = TokenRequest.builder()
-				.token("AAA")
+				.token("BBB")
 				.build();
 		
+		SpendInfo mockSpendInfo = SpendInfo.builder()
+				.token("BBB")
+				.spendUserId(11)
+				.roomId("R02")
+				.spendTime(LocalDateTime.now().minusDays(8))
+				.totalMoney(6000)
+				.build();
+		
+		BDDMockito.given(spendInfoDao.findByToken("BBB")).willReturn(mockSpendInfo);
+		
+		//when
 		final ResultActions actions = mvc.perform(post("/inquiry")
 			.headers(httpHeaders)
 			.content(objectMapper.writeValueAsString(request))
@@ -64,20 +81,30 @@ public class SpendServiceInquiryTest {
 		//then
 		actions
 			.andExpect(status().is4xxClientError())
-			.andExpect(jsonPath("code").value("I002"))
-			.andExpect(jsonPath("message").value("조회할 수 없는 사용자입니다."));
+			.andExpect(jsonPath("code").value("I003"))
+			.andExpect(jsonPath("message").value("조회 기간을 경과하였습니다."));
 	}
 	
 	@Test
-	public void 유효하지않은_토큰조회_테스트() throws Exception {
+	public void 조회API테스트() throws Exception {
 		//given
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.add("X-USER-ID", "10");
 		httpHeaders.add("X-ROOM-ID", "R01");
 		
 		TokenRequest request = TokenRequest.builder()
-				.token("CCC")
+				.token("AAA")
 				.build();
+		
+		SpendInfo mockSpendInfo = SpendInfo.builder()
+				.token("AAA")
+				.spendUserId(10)
+				.roomId("R01")
+				.spendTime(LocalDateTime.now())
+				.totalMoney(6000)
+				.build();
+		
+		BDDMockito.given(spendInfoDao.findByToken("AAA")).willReturn(mockSpendInfo);
 		
 		final ResultActions actions = mvc.perform(post("/inquiry")
 			.headers(httpHeaders)
@@ -87,8 +114,11 @@ public class SpendServiceInquiryTest {
 		
 		//then
 		actions
-			.andExpect(status().is4xxClientError())
-			.andExpect(jsonPath("code").value("I001"))
-			.andExpect(jsonPath("message").value("유효하지 않은 토큰입니다."));
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("spendTime").isString())
+			.andExpect(jsonPath("spendMoney").isNumber())
+			.andExpect(jsonPath("receivedMoney").isNumber())
+			.andExpect(jsonPath("receivedInfos").isArray());
 	}
 }
+

@@ -13,14 +13,17 @@ public class SpendInfoTest {
 	
 	final LocalDateTime now = LocalDateTime.now();
 	
+	SpendInfo spendInfo = SpendInfo.builder()
+			.token("AAA")
+			.spendUserId(10)
+			.roomId("ABC")
+			.totalMoney(5000L)
+			.build();
+			
 	@Test
 	public void 조회유효기간경과_테스트() {
-		SpendInfo spendInfo = SpendInfo.builder()
-				.token("AAA")
-				.spendUserId(10)
+		spendInfo = spendInfo.toBuilder()
 				.spendTime(now.minusDays(8))
-				.roomId("ABC")
-				.totalMoney(5000L)
 				.build();
 		
 		assertTrue(spendInfo.isInquiryExpired(now));
@@ -28,14 +31,10 @@ public class SpendInfoTest {
 	
 	@Test
 	public void 받기유효기간경과_테스트() {
-		SpendInfo spendInfo = SpendInfo.builder()
-				.token("BBB")
-				.spendUserId(10)
+		spendInfo = spendInfo.toBuilder()
 				.spendTime(now.minusMinutes(11))
-				.roomId("ABC")
-				.totalMoney(5000L)
 				.build();
-
+		
 		assertTrue(spendInfo.isSpendExpired(now));
 	}
 }

@@ -4,7 +4,6 @@ import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 import org.slf4j.Logger;
@@ -16,15 +15,12 @@ import com.kakaopay.pretask.dao.SpendInfoDao;
 import com.kakaopay.pretask.dto.MoneyResponse;
 import com.kakaopay.pretask.dto.SpendInfoRequest;
 import com.kakaopay.pretask.dto.SpendStatusResponse;
-import com.kakaopay.pretask.dto.TokenRequest;
 import com.kakaopay.pretask.dto.TokenResponse;
 import com.kakaopay.pretask.entity.SpendInfo;
 import com.kakaopay.pretask.entity.SpendMoneyDetail;
 import com.kakaopay.pretask.exception.SpendErrorCode;
 import com.kakaopay.pretask.exception.SpendException;
-import com.kakaopay.pretask.exception.SpendExceptionHandler;
 import com.kakaopay.pretask.repository.SpendDetailRepository;
-import com.kakaopay.pretask.repository.SpendRepository;
 import com.kakaopay.pretask.vo.ReceivedInfo;
 import com.kakaopay.pretask.vo.UserInfo;
 
@@ -145,6 +141,9 @@ public class SpendService {
 		//다른 사람의 뿌리기 건 체크
 		spendInfo.checkNotSameUserId(userInfo.getUserId());
 		
+		//뿌리기가 호출된 대화방과 동일한 대화방에 속한 사용자만이 받을 수 있음
+		spendInfo.checkRoomId(userInfo.getRoomId());
+				
 		//7일 동안 조회 가능
 		if(spendInfo.isInquiryExpired(nowDate)) {throw new SpendException(SpendErrorCode.INQUIRY_EXPIRED);}
 		

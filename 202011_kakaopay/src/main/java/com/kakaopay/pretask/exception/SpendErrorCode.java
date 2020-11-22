@@ -10,6 +10,10 @@ import lombok.Getter;
 @Getter
 public enum SpendErrorCode {
 	
+	//공통 에러
+	ID_NOT_NUMBER("C001", "아이디는 숫자형이어야합니다."),
+	NO_REQUEST_BODY("C002", "Request Body가 없습니다."),
+	
 	//Header 에러
 	HEADER_NO_USERID("H001", "사용자를 조회할 수 없습니다."),
 	HEADER_NO_ROOMID("H002", "대화방을 조회할 수 없습니다."),
@@ -23,7 +27,7 @@ public enum SpendErrorCode {
 	//뿌리기한 사용자
 	RECV_NOT_ALLOWED_USER("R002","뿌린 사용자는 받을 수 없습니다."),
 	//뿌리기에 속하지 않은 대화방
-	RECV_NOT_ALLOWED_ROOM("R003","뿌리지 않은 대화방입니다."),
+	RECV_NOT_ALLOWED_ROOM("R003","뿌리기한 방과 동일한 방에서만 받을 수 있습니다."),
 	//10분 경과
 	SPEND_EXPIRED("R004","받을 기간을 경과하였습니다."),
 	//모두 받은 뿌리기 건

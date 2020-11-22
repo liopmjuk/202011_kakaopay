@@ -3,6 +3,8 @@ package com.kakaopay.pretask.controller;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -31,6 +33,8 @@ public class SpendController {
 	
 	@Autowired
 	SpendService spendService;
+	
+	Logger logger = LoggerFactory.getLogger(SpendController.class);
 	
 	/**
 	 * 뿌리기 API
@@ -86,6 +90,12 @@ public class SpendController {
 		
 		String userId = headers.get("X-USER-ID");
 		String roomId = headers.get("X-ROOM-ID");
+		
+		//postman 테스트용
+		if (userId == null && roomId == null) {
+			userId = headers.get("x-user-id");
+			roomId = headers.get("x-room-id");
+		}
 		
 		if("".equals(userId) || userId == null) { throw new SpendException(SpendErrorCode.HEADER_NO_USERID); }
 		if("".equals(roomId) || roomId == null) { throw new SpendException(SpendErrorCode.HEADER_NO_ROOMID); }
