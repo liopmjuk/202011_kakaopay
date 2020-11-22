@@ -63,7 +63,7 @@ public class SpendControllerTest {
 			.andExpect(jsonPath("message").value("사용자를 조회할 수 없습니다."));
 	}
 	
-//	@Test
+	@Test
 	public void 헤더_ROOMID없는경우_테스트() throws Exception {
 		//given
 		HttpHeaders httpHeaders = new HttpHeaders();

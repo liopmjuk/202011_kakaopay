@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Getter
@@ -22,6 +23,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
+@ToString
 public class SpendMoneyDetail {
 	@Id
 	private String token;
@@ -37,4 +39,10 @@ public class SpendMoneyDetail {
 	
 	@Column(name="RECEIVED_USER_ID")
 	private int receivedUserId;
+
+	public void changeReceivedInfo(int receivedUserId, String receivedYn) {
+		// TODO Auto-generated method stub
+		this.receivedUserId = receivedUserId;
+		this.receivedYn = receivedYn;
+	}
 }

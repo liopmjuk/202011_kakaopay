@@ -124,10 +124,7 @@ public class SpendService {
 		
 		//뿌리기 건 중 누구에게도 할당되지 않은 분배건 하나를 호출한 사용자에게 할당하고, 그 금액을 응답값으로 내려줌
 		SpendMoneyDetail distribution = distributeToUser(startIdx, moneyDetails);
-		distribution.toBuilder()
-					.receivedUserId(userInfo.getUserId())
-					.receivedYn("Y")
-					.build();
+		distribution.changeReceivedInfo(userInfo.getUserId(), "Y");
 		
 		spendDetailRepository.save(distribution);
 		
