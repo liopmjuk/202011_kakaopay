@@ -81,8 +81,8 @@ public class SpendServiceMockInquriyTest {
 		//then
 		actions
 			.andExpect(status().is4xxClientError())
-			.andExpect(jsonPath("code").value("I003"))
-			.andExpect(jsonPath("message").value("조회 기간을 경과하였습니다."));
+			.andExpect(jsonPath("errorCode").value("I003"))
+			.andExpect(jsonPath("errorMsg").value("조회 기간을 경과하였습니다."));
 	}
 	
 	@Test

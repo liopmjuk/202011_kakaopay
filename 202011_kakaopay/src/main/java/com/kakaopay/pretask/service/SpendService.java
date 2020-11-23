@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kakaopay.pretask.dao.SpendInfoDao;
 import com.kakaopay.pretask.dto.MoneyResponse;
@@ -42,6 +43,7 @@ public class SpendService {
 	private static Random random = new Random();
 	Logger logger = LoggerFactory.getLogger(SpendService.class);
 	
+	@Transactional
 	public TokenResponse spendMoney(SpendInfoRequest spendInfoRequest, UserInfo userInfo) throws NoSuchAlgorithmException {
 		// TODO Auto-generated method stub
 		int peopleNum = spendInfoRequest.getPeopleNum();
@@ -91,7 +93,8 @@ public class SpendService {
 		
 		return response;
 	}
-
+	
+	@Transactional
 	public MoneyResponse receiveMoney(String token, UserInfo userInfo) {
 		
 		LocalDateTime nowTime = LocalDateTime.now();
@@ -131,6 +134,7 @@ public class SpendService {
 		return response;
 	}
 
+	@Transactional(readOnly = true)
 	public SpendStatusResponse inquirySpendingStatus(String token, UserInfo userInfo) {
 		
 		LocalDateTime nowDate = LocalDateTime.now();

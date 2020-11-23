@@ -64,8 +64,8 @@ public class SpendServiceInquiryTest {
 		//then
 		actions
 			.andExpect(status().is4xxClientError())
-			.andExpect(jsonPath("code").value("I002"))
-			.andExpect(jsonPath("message").value("조회할 수 없는 사용자입니다."));
+			.andExpect(jsonPath("errorCode").value("I002"))
+			.andExpect(jsonPath("errorMsg").value("조회할 수 없는 사용자입니다."));
 	}
 	
 	@Test
@@ -88,7 +88,7 @@ public class SpendServiceInquiryTest {
 		//then
 		actions
 			.andExpect(status().is4xxClientError())
-			.andExpect(jsonPath("code").value("I001"))
-			.andExpect(jsonPath("message").value("유효하지 않은 토큰입니다."));
+			.andExpect(jsonPath("errorCode").value("I001"))
+			.andExpect(jsonPath("errorMsg").value("유효하지 않은 토큰입니다."));
 	}
 }

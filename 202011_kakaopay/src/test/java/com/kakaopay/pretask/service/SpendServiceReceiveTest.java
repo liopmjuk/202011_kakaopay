@@ -81,8 +81,8 @@ public class SpendServiceReceiveTest {
 		//then
 		actions
 			.andExpect(status().is4xxClientError())
-			.andExpect(jsonPath("code").value("R002"))
-			.andExpect(jsonPath("message").value("뿌린 사용자는 받을 수 없습니다."));
+			.andExpect(jsonPath("errorCode").value("R002"))
+			.andExpect(jsonPath("errorMsg").value("뿌린 사용자는 받을 수 없습니다."));
 	}
 	
 	@Test
@@ -116,8 +116,8 @@ public class SpendServiceReceiveTest {
 		//then
 		actions
 			.andExpect(status().is4xxClientError())
-			.andExpect(jsonPath("code").value("R003"))
-			.andExpect(jsonPath("message").value("뿌리기한 방과 동일한 방에서만 받을 수 있습니다."));
+			.andExpect(jsonPath("errorCode").value("R003"))
+			.andExpect(jsonPath("errorMsg").value("뿌리기한 방과 동일한 방에서만 받을 수 있습니다."));
 	}
 	
 	@Test
@@ -151,8 +151,8 @@ public class SpendServiceReceiveTest {
 		//then
 		actions
 			.andExpect(status().is4xxClientError())
-			.andExpect(jsonPath("code").value("R004"))
-			.andExpect(jsonPath("message").value("받을 기간을 경과하였습니다."));
+			.andExpect(jsonPath("errorCode").value("R004"))
+			.andExpect(jsonPath("errorMsg").value("받을 기간을 경과하였습니다."));
 	}
 	
 	@Test
@@ -186,8 +186,8 @@ public class SpendServiceReceiveTest {
 		//then
 		actions
 			.andExpect(status().is4xxClientError())
-			.andExpect(jsonPath("code").value("R001"))
-			.andExpect(jsonPath("message").value("이미 받은 사용자입니다."));
+			.andExpect(jsonPath("errorCode").value("R001"))
+			.andExpect(jsonPath("errorMsg").value("이미 받은 사용자입니다."));
 	}
 	
 	@Test
@@ -221,8 +221,8 @@ public class SpendServiceReceiveTest {
 		//then
 		actions
 			.andExpect(status().is4xxClientError())
-			.andExpect(jsonPath("code").value("R005"))
-			.andExpect(jsonPath("message").value("이미 완료된 뿌리기건입니다."));
+			.andExpect(jsonPath("errorCode").value("R005"))
+			.andExpect(jsonPath("errorMsg").value("이미 완료된 뿌리기건입니다."));
 	}
 	
 	@Test

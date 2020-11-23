@@ -59,8 +59,8 @@ public class SpendControllerTest {
 		//then
 		actions
 			.andExpect(status().is4xxClientError())
-			.andExpect(jsonPath("code").value("H001"))
-			.andExpect(jsonPath("message").value("사용자를 조회할 수 없습니다."));
+			.andExpect(jsonPath("errorCode").value("H001"))
+			.andExpect(jsonPath("errorMsg").value("사용자를 조회할 수 없습니다."));
 	}
 	
 	@Test
@@ -85,8 +85,8 @@ public class SpendControllerTest {
 		//then
 		actions
 			.andExpect(status().is4xxClientError())
-			.andExpect(jsonPath("code").value("H002"))
-			.andExpect(jsonPath("message").value("대화방을 조회할 수 없습니다."));
+			.andExpect(jsonPath("errorCode").value("H002"))
+			.andExpect(jsonPath("errorMsg").value("대화방을 조회할 수 없습니다."));
 	}
 	
 //	@Test
